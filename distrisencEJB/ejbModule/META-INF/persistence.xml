@@ -16,5 +16,7 @@
 		<class>distrisenc.model.core.entities.ThmRolDetalle</class>
 		<class>distrisenc.model.core.entities.VenDetProforma</class>
 		<class>distrisenc.model.core.entities.VenProforma</class>
+		<class>distrisenc.model.core.entities.VenDetFactura</class>
+		<class>distrisenc.model.core.entities.VenFactura</class>
 	</persistence-unit>
 </persistence>
