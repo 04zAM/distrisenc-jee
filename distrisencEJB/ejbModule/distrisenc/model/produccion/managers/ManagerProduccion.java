@@ -43,7 +43,9 @@ public class ManagerProduccion {
     	producto.setNombre(nuevoProducto.getNombre());
     	producto.setCosto(nuevoProducto.getCosto());
     	producto.setVenta(nuevoProducto.getVenta());
-    	producto.setEstado(true);
+    	producto.setVendible(nuevoProducto.getVendible());
+    	producto.setStock(nuevoProducto.getStock());
+    	producto.setActivo(true);
     	mDAO.insertar(producto);
     	return producto;
     }
