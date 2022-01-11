@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import distrisenc.controller.JSFUtil;
@@ -74,6 +76,11 @@ public class BeanPrdProductos implements Serializable {
 			e.printStackTrace();
 		}
 	}
+	
+	public void checkMessage() {
+        String summary = nuevoProducto.getVendible() ? "Marcado como Vendible" : "Marcado como Materia Prima";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+    }
 
 	public List<PrdProducto> getlistaProductos() {
 		return listaProductos;

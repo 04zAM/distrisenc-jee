@@ -46,6 +46,10 @@ public class SegUsuario implements Serializable {
 	@OneToMany(mappedBy="segUsuario")
 	private List<ThmEmpleado> thmEmpleados;
 
+	//bi-directional many-to-one association to VenFactura
+	@OneToMany(mappedBy="segUsuario")
+	private List<VenFactura> venFacturas;
+
 	//bi-directional many-to-one association to VenProforma
 	@OneToMany(mappedBy="segUsuario")
 	private List<VenProforma> venProformas;
@@ -151,6 +155,28 @@ public class SegUsuario implements Serializable {
 		thmEmpleado.setSegUsuario(null);
 
 		return thmEmpleado;
+	}
+
+	public List<VenFactura> getVenFacturas() {
+		return this.venFacturas;
+	}
+
+	public void setVenFacturas(List<VenFactura> venFacturas) {
+		this.venFacturas = venFacturas;
+	}
+
+	public VenFactura addVenFactura(VenFactura venFactura) {
+		getVenFacturas().add(venFactura);
+		venFactura.setSegUsuario(this);
+
+		return venFactura;
+	}
+
+	public VenFactura removeVenFactura(VenFactura venFactura) {
+		getVenFacturas().remove(venFactura);
+		venFactura.setSegUsuario(null);
+
+		return venFactura;
 	}
 
 	public List<VenProforma> getVenProformas() {

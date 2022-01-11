@@ -15,6 +15,7 @@
 	<p:growl>
 		<p:autoUpdate />
 	</p:growl>
+	<p:growl id="msg"/>
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
@@ -41,6 +42,15 @@
 					<h:outputText value="Precio de Venta:" />
 					<p:inputText value="#{beanPrdProductos.nuevoProducto.venta}"
 						required="true" requiredMessage="Ingrese el pvp del producto." />
+					<h:outputText value="Stock Inicial:" />
+					<p:inputNumber value="#{beanPrdProductos.nuevoProducto.stock}"
+						minValue="1" />
+					<h:outputText value="Vendible:" />
+					<p:selectBooleanCheckbox
+						value="#{beanPrdProductos.nuevoProducto.vendible}">
+						<p:ajax update="msg"
+							listener="#{beanPrdProductos.checkMessage()}" />
+					</p:selectBooleanCheckbox>
 					<p:commandButton value="Guardar" icon="pi pi-save"
 						update="@form:,formDatos"
 						actionListener="#{beanPrdProductos.actionListenerInsertarProducto()}"></p:commandButton>
@@ -63,6 +73,15 @@
 				<p:column headerText="PRECIO VENTA">
 					<i class="pi pi-dollar" style="font-size: 1rem"></i>
 					<h:outputText value="#{p.venta}" />
+				</p:column>
+				<p:column headerText="STOCK">
+					<h:outputText value="#{p.stock}" />
+				</p:column>
+				<p:column headerText="VENDIBLE">
+					<i
+						class="#{p.vendible ? 'pi pi-check-circle' :'pi pi-times-circle'}"
+						style="font-size: 1rem"></i>
+					<h:outputText value="#{p.vendible ? ' Si' :' No'}" />
 				</p:column>
 				<p:column headerText="OPCIONES">
 					<p:commandButton icon="pi pi-pencil" title="editar"
@@ -89,6 +108,12 @@
 				<h:outputText value="Precio de Venta:" />
 				<p:inputText value="#{beanPrdProductos.edicionProducto.venta}"
 					required="true" requiredMessage="Ingrese el pvp del producto." />
+				<h:outputText value="Vendible:" />
+				<p:selectBooleanCheckbox
+					value="#{beanPrdProductos.edicionProducto.vendible}" >
+					<p:ajax update="msg"
+						listener="#{beanPrdProductos.checkMessage()}" />
+				</p:selectBooleanCheckbox>
 				<p:commandButton value="Guardar" icon="pi pi-save"
 					update="@form,:formDatos"
 					actionListener="#{beanPrdProductos.actionListenerGuardaredicionProducto()}"></p:commandButton>
