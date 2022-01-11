@@ -15,33 +15,28 @@ import java.math.BigDecimal;
 public class VenDetFactura implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id_det_factura", unique=true, nullable=false)
+	private Integer idDetFactura;
 
 	@Column(nullable=false)
 	private Integer cantidad;
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id_det_factura", unique=true,nullable=false)
-	private Integer idDetFactura;
-
-	@Column(name="id_factura", nullable=false)
-	private Integer idFactura;
-
-	@Column(name="id_producto", nullable=false)
-	private Integer idProducto;
 
 	@Column(nullable=false, precision=131089)
 	private BigDecimal total;
 
+	//bi-directional many-to-one association to PrdProducto
+	@ManyToOne
+	@JoinColumn(name="id_producto", nullable=false)
+	private PrdProducto prdProducto;
+
+	//bi-directional many-to-one association to VenFactura
+	@ManyToOne
+	@JoinColumn(name="id_factura", nullable=false)
+	private VenFactura venFactura;
+
 	public VenDetFactura() {
-	}
-
-	public Integer getCantidad() {
-		return this.cantidad;
-	}
-
-	public void setCantidad(Integer cantidad) {
-		this.cantidad = cantidad;
 	}
 
 	public Integer getIdDetFactura() {
@@ -52,20 +47,12 @@ public class VenDetFactura implements Serializable {
 		this.idDetFactura = idDetFactura;
 	}
 
-	public Integer getIdFactura() {
-		return this.idFactura;
+	public Integer getCantidad() {
+		return this.cantidad;
 	}
 
-	public void setIdFactura(Integer idFactura) {
-		this.idFactura = idFactura;
-	}
-
-	public Integer getIdProducto() {
-		return this.idProducto;
-	}
-
-	public void setIdProducto(Integer idProducto) {
-		this.idProducto = idProducto;
+	public void setCantidad(Integer cantidad) {
+		this.cantidad = cantidad;
 	}
 
 	public BigDecimal getTotal() {
@@ -74,6 +61,22 @@ public class VenDetFactura implements Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public PrdProducto getPrdProducto() {
+		return this.prdProducto;
+	}
+
+	public void setPrdProducto(PrdProducto prdProducto) {
+		this.prdProducto = prdProducto;
+	}
+
+	public VenFactura getVenFactura() {
+		return this.venFactura;
+	}
+
+	public void setVenFactura(VenFactura venFactura) {
+		this.venFactura = venFactura;
 	}
 
 }
