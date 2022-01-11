@@ -62,6 +62,7 @@ public class ManagerProduccion {
     	producto.setNombre(edicionProducto.getNombre());
     	producto.setCosto(edicionProducto.getCosto());
     	producto.setVenta(edicionProducto.getVenta());
+    	producto.setVendible(edicionProducto.getVendible());
     	mDAO.actualizar(producto);
     }
 
