@@ -9,6 +9,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import distrisenc.controller.JSFUtil;
+import distrisenc.model.core.entities.SegUsuario;
 import distrisenc.model.core.entities.VenProforma;
 import distrisenc.model.ventas.managers.ManagerVentas;
 
@@ -32,17 +33,17 @@ public class BeanVenEmpleados implements Serializable {
 
 	public void actionListenerPagar50(VenProforma proforma, String obs) {
 		try {
-			mVentas.confirmarPago50(proforma, obs);
-			JSFUtil.crearMensajeINFO("Pago 50%.");
+			mVentas.autorizarProforma(proforma, obs);
+			JSFUtil.crearMensajeINFO("Enviada a produccion.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
-	public void actionListenerPagarTotal(VenProforma proforma) {
+	public void actionListenerPagarTotal(VenProforma proforma, String obs, int usuario) {
 		try {
-			mVentas.confirmarPagoTotal(proforma);
+			mVentas.confirmarPagoTotal(proforma, obs , usuario);
 			JSFUtil.crearMensajeINFO("Pago total.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());

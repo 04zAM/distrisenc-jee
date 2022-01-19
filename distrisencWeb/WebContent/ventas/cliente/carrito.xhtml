@@ -19,6 +19,12 @@
 		<p:menubar>
 			<p:menuitem value="Seguir Comprando" icon="pi pi-shopping-cart"
 				action="menu" />
+			<p:menuitem value="Confirmar Pedido" icon="pi pi-plus"
+				id="cmdConfirmacion"
+				actionListener="#{beanVenClientes.actionListenerConfirmarPedido(beanSegLogin.loginDTO.idSegUsuario)}">
+				<p:confirm header="Confirmación"
+					message="Desea confirmar el pedido?" icon="pi pi-info-circle" />
+			</p:menuitem>
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -57,13 +63,10 @@
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
+			<h:outputText value="Observaciones" />
+			<h:inputTextarea value="#{beanVenClientes.carrito.observaciones}" />
+			<h:outputText value="Total: #{beanVenClientes.carrito.total}" />
 		</h:form>
-		<p:commandButton value="Confirmar Pedido" icon="pi pi-plus"
-			id="cmdConfirmacion"
-			actionListener="#{beanVenClientes.actionListenerConfirmarPedido(beanSegLogin.loginDTO.idSegUsuario, 'Ninguna')}">
-			<p:confirm header="Confirmación" message="Desea confirmar el pedido?"
-				icon="pi pi-info-circle" />
-		</p:commandButton>
 	</p:panel>
 	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
 		responsive="true" width="350">

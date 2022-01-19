@@ -32,7 +32,7 @@ public class BeanPrdOrdenes implements Serializable {
 
 	public void actionListenerPagar50(VenProforma proforma, String obs) {
 		try {
-			mVentas.confirmarPago50(proforma, obs);
+			//mVentas.autorizarProforma(proforma, obs);
 			JSFUtil.crearMensajeINFO("Pago 50%.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
@@ -42,7 +42,7 @@ public class BeanPrdOrdenes implements Serializable {
 	
 	public void actionListenerPagarTotal(VenProforma proforma) {
 		try {
-			mVentas.confirmarPagoTotal(proforma);
+			//mVentas.confirmarPagoTotal(proforma);
 			JSFUtil.crearMensajeINFO("Pago total.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
