@@ -1,58 +1,97 @@
 package distrisenc.controller.inventario;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.FilterMeta;
+import org.primefaces.model.MatchMode;
+
 import distrisenc.controller.JSFUtil;
+import distrisenc.model.core.entities.InventarioCa;
 import distrisenc.model.core.entities.PrdProducto;
+import distrisenc.model.inventario.managers.ManagerInventario;
 import distrisenc.model.produccion.managers.ManagerProduccion;
+
+
+
 
 @Named
 @SessionScoped
 public class BeanInvBodeguero implements Serializable {
-	private static final long serialVersionUID = 1L;
 	@EJB
-	private ManagerProduccion mProduccion;
-	private List<PrdProducto> listaProductos;
+	private ManagerInventario mInventario;
+	private InventarioCa nuevoInventario;
+	private List<InventarioCa> listaInventario;
+
+
 	
-	
-	private PrdProducto nuevoProducto;
-	private PrdProducto edicionProducto;
-	private PrdProducto productoSeleccionado;
 
 	public BeanInvBodeguero() {
 		
 	}
+	
 	@PostConstruct
-	public void inicializacion() {
-		System.out.println("BeanPrdProductos inicializado...");
-		nuevoProducto=new PrdProducto();
+	public void inicializar() {
+		listaInventario=mInventario.findAllInventarioCas();
+		nuevoInventario=mInventario.inicializarInventario();
+
 	}
 	
-	public String actionCargarMenuProductos() {
-		listaProductos=mProduccion.findAllPrductos();
-		return "productos?faces-redirect=true";
+	public void actionListenerInsertarInven() {
+		try {
+			mInventario.insertarInventario(nuevoInventario);
+			JSFUtil.crearMensajeINFO("Ingreso Correcto");
+			listaInventario=mInventario.findAllInventarioCas();
+		}catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
+		}
 	}
+
+	public InventarioCa getNuevoInventario() {
+		return nuevoInventario;
+	}
+
+	public void setNuevoInventario(InventarioCa nuevoInventario) {
+		this.nuevoInventario = nuevoInventario;
+	}
+
+	public List<InventarioCa> getListaInventario() {
+		return listaInventario;
+	}
+
+	public void setListaInventario(List<InventarioCa> listaInventario) {
+		this.listaInventario = listaInventario;
+	}
+
+	
+   
+
 	
 	
 	
 
 	
-
-	public List<PrdProducto> getlistaProductos() {
-		return listaProductos;
-	}
-
-	public void setlistaProductos(List<PrdProducto> listaProductos) {
-		this.listaProductos = listaProductos;
-	}
 	
 	
 
 }
+	
+
+
+	
+	
+
+
 

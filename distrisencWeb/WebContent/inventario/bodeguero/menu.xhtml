@@ -8,15 +8,13 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head></h:head>
+<h:head>Inventario</h:head>
 <body>
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Productos" icon="pi pi-briefcase"
-					action="#{beanInvBodeguero.actionCargarMenuProductos()}"  />
-			<p:menuitem value="Ingresos" icon="pi pi-step-forward"  action="#{beanInvBodeguero.actionCargarMenuProductos()}" />
-			<p:menuitem value="Egressos" icon="pi pi-step-backward" action="#{beanInvBodeguero.actionCargarMenuProductos()}" />
+			<p:menuitem value="Ingresos" icon="pi pi-step-forward"  action="ingresos?faces-redirect=true"/>
+			
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -28,21 +26,6 @@
 		</p:menubar>
 		<p:staticMessage severity="info" summary="Módulo de inventario"></p:staticMessage>
 	</h:form>
-	<div>
-		<h:form>
-		<p:panelGrid columns="2">
-		<h:outputText value="ID" />
-		<h:outputText />
-		<h:outputText value="Producto" />
-		<p:inputText value="#{beanFactEmpleado.nuevaFactura.idSegUsuario}"   />
-		<h:outputText value="Cantidad" />
-		<p:calendar  value=""/>  
-		<h:outputText value="Estado" />
-		<p:calendar  value=""/> 
-		<p:commandButton value="Guardar" icon="pi pi-save" 
-		actionListener="#{beanFactEmpleado.actionListenerInsertarFactura()}"/>
-	</p:panelGrid>
-		</h:form>
-	</div>
+
 </body>
 </html>
