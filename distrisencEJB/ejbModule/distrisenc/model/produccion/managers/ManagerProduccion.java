@@ -7,7 +7,9 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import distrisenc.model.auditoria.managers.ManagerAuditoria;
+import distrisenc.model.core.entities.PrdOrden;
 import distrisenc.model.core.entities.PrdProducto;
+import distrisenc.model.core.entities.VenProforma;
 import distrisenc.model.core.managers.ManagerDAO;
 import distrisenc.model.core.utils.ModelUtil;
 
@@ -37,6 +39,15 @@ public class ManagerProduccion {
     public List<PrdProducto> findAllPrductos(){
     	return mDAO.findAll(PrdProducto.class, "nombre");
     }
+    
+    public List<PrdOrden> findAllOrdenes(){
+    	return mDAO.findAll(PrdOrden.class, "idOrden");
+    }
+    
+    public void confirmarAutorizacion(PrdOrden orden) throws Exception {
+		orden.setEstado("Autorizada");
+		mDAO.actualizar(orden);
+	}
     
     public PrdProducto insertarProducto(PrdProducto nuevoProducto) throws Exception {
     	PrdProducto producto = new PrdProducto();

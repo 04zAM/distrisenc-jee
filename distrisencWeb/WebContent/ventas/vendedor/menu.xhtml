@@ -8,7 +8,9 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head>Ventas</h:head>
+<h:head>
+	<title>Ventas</title>
+</h:head>
 <body>
 	<p:growl>
 		<p:autoUpdate />
@@ -16,6 +18,8 @@
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
+			<p:menuitem value="Pedidos" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuPedidos()}" />
+			<p:menuitem value="Facturas" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -46,14 +50,13 @@
 						<h:outputText value="#{p.estado}" />
 					</p:column>
 					<p:column headerText="OPCIONES">
-						<p:commandButton icon="pi pi-check-square"
-							value="Crear Orden" update="@form"
+						<p:commandButton icon="pi pi-check-square" value="Crear Orden"
+							update="@form"
 							actionListener="#{beanVenEmpleados.actionListenerPagar50(p, 'Ninguna')}"
 							disabled="#{p.estado == 'Autorizada' || p.estado == 'Entregado'}">
 						</p:commandButton>
-						<p:commandButton icon="pi pi-check-square"
-							value="Pagado Total" styleClass="ui-button-danger"
-							update="@form"
+						<p:commandButton icon="pi pi-check-square" value="Pagado Total"
+							styleClass="ui-button-danger" update="@form"
 							actionListener="#{beanVenEmpleados.actionListenerPagarTotal(p, 'Ninguna', beanSegLogin.loginDTO.idSegUsuario)}"
 							disabled="#{p.estado == 'Pagado' || p.estado == 'Entregado'}">
 							<p:confirm header="Confirmación"

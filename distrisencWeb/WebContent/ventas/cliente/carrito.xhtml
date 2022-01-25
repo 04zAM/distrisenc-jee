@@ -47,7 +47,6 @@
 					<h:outputText value="#{d.prdProducto.venta}" />
 				</p:column>
 				<p:column headerText="Cantidad">
-					<i class="pi pi-dollar" style="font-size: 1rem"></i>
 					<h:outputText value="#{d.cantidad}" />
 				</p:column>
 				<p:column headerText="Subtotal">
@@ -63,8 +62,9 @@
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
-			<h:outputText value="Observaciones" />
-			<h:inputTextarea value="#{beanVenClientes.carrito.observaciones}" />
+			<h:outputText value="Observaciones: " />
+			<p:inputTextarea value="#{beanVenClientes.carrito.observaciones}" />
+			<h:outputText value=" " />
 			<h:outputText value="Total: #{beanVenClientes.carrito.total}" />
 		</h:form>
 	</p:panel>

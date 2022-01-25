@@ -38,9 +38,10 @@
 				<h:outputText value="Nombre del producto:" />
 				<h:outputText value="#{beanVenClientes.productoSeleccionado.nombre}" />
 				<h:outputText value="Precio de Venta:" />
-				<h:outputText value="#{beanVenClientes.productoSeleccionado.venta}" />
+				<p:inputText value="#{beanVenClientes.productoSeleccionado.venta}"
+					required="true" requiredMessage="Ingrese la cantidad." />
 				<h:outputText value="Cantidad:" />
-				<p:inputNumber value="#{beanVenClientes.cantidad}" required="true" oninvalid="Sock invalido"
+				<p:inputNumber value="#{beanVenClientes.cantidad}" required="true"
 					requiredMessage="Ingrese la cantidad." minValue="1" maxValue="999" />
 				<p:commandButton icon="pi pi-shopping-cart"
 					value="Agregar al Carrito" update="@form,:formDatos"

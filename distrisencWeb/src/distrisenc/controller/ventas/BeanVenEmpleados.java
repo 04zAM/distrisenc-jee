@@ -22,13 +22,23 @@ public class BeanVenEmpleados implements Serializable {
 	private List<VenProforma> listaPedidos;
 
 	public BeanVenEmpleados() {
-		
+
 	}
 
 	@PostConstruct
 	public void inicializacion() {
 		System.out.println("BeanVenCliente inicializado...");
 		listaPedidos = mVentas.findAllProformas();
+	}
+
+	public String actionCargarMenuPedidos() {
+		listaPedidos = mVentas.findAllProformas();
+		return "pedidos?faces-redirect=true";
+	}
+
+	public String actionCargarMenuFacturas() {
+		listaPedidos = mVentas.findAllProformas();
+		return "facturas?faces-redirect=true";
 	}
 
 	public void actionListenerPagar50(VenProforma proforma, String obs) {
@@ -40,17 +50,17 @@ public class BeanVenEmpleados implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void actionListenerPagarTotal(VenProforma proforma, String obs, int usuario) {
 		try {
-			mVentas.confirmarPagoTotal(proforma, obs , usuario);
+			mVentas.confirmarPagoTotal(proforma, obs, usuario);
 			JSFUtil.crearMensajeINFO("Pago total.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<VenProforma> getlistaPedidos() {
 		return listaPedidos;
 	}

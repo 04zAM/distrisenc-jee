@@ -63,8 +63,13 @@ public class ManagerVentas {
 	public void agregarDetalle(VenDetProforma nuevoDetalle) throws Exception {
 		boolean esNuevo = true;
 		VenDetProforma detalle = new VenDetProforma();
-		detalle.setPrdProducto(nuevoDetalle.getPrdProducto());
-		detalle.setCantidad(nuevoDetalle.getCantidad());
+		PrdProducto producto = new PrdProducto();
+		producto = nuevoDetalle.getPrdProducto();
+		detalle.setPrdProducto(producto);
+		int cantidad = nuevoDetalle.getCantidad();
+		producto.setStock(producto.getStock().subtract(new BigDecimal(cantidad)));
+		mDAO.actualizar(producto);
+		detalle.setCantidad(cantidad);
 		detalle.setTotal(nuevoDetalle.getTotal());
 		if (!carrito.getListaDetalles().isEmpty()) {
 			for (VenDetProforma det : carrito.getListaDetalles()) {
