@@ -17,5 +17,6 @@
 		<class>distrisenc.model.core.entities.VenDetProforma</class>
 		<class>distrisenc.model.core.entities.VenProforma</class>
 		<class>distrisenc.model.core.entities.InventarioCa</class>
+		<class>distrisenc.model.core.entities.AbsMaterialPrima</class>
 	</persistence-unit>
 </persistence>

@@ -25,14 +25,16 @@ public class InventarioCa implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
 
-	@Column(name="id_producto")
-	private Integer idProducto;
-
+	//bi-directional many-to-one association to PrdProducto
+	@ManyToOne
+	@JoinColumn(name="id_producto")
 	@Column(length=50)
 	private String nombre;
 
 	@Column(length=50)
 	private String tipo;
+  
+	private PrdProducto prdProducto;
 
 	public InventarioCa() {
 	}
@@ -85,4 +87,11 @@ public class InventarioCa implements Serializable {
 		this.tipo = tipo;
 	}
 
+	public PrdProducto getPrdProducto() {
+		return this.prdProducto;
+	}
+
+	public void setPrdProducto(PrdProducto prdProducto) {
+		this.prdProducto = prdProducto;
+	}
 }
