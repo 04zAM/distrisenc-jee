@@ -21,6 +21,8 @@ public class BeanPrdProductos implements Serializable {
 	@EJB
 	private ManagerProduccion mProduccion;
 	private List<PrdProducto> listaProductos;
+	
+	
 	private PrdProducto nuevoProducto;
 	private PrdProducto edicionProducto;
 	private PrdProducto productoSeleccionado;

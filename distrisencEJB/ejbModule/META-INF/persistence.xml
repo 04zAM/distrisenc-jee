@@ -3,18 +3,6 @@
 	<persistence-unit name="mmarketdemoDS" transaction-type="JTA">
 		<jta-data-source>java:/mmarketdemoDS</jta-data-source>
 		<class>distrisenc.model.core.entities.VwThmConsultaRol</class>
-		<class>distrisenc.model.core.entities.AudBitacora</class>
-		<class>distrisenc.model.core.entities.PrdOrden</class>
-		<class>distrisenc.model.core.entities.PrdProducto</class>
-		<class>distrisenc.model.core.entities.SegAsignacion</class>
-		<class>distrisenc.model.core.entities.SegModulo</class>
-		<class>distrisenc.model.core.entities.SegPerfil</class>
-		<class>distrisenc.model.core.entities.SegUsuario</class>
-		<class>distrisenc.model.core.entities.ThmCargo</class>
-		<class>distrisenc.model.core.entities.ThmEmpleado</class>
-		<class>distrisenc.model.core.entities.ThmRolCabecera</class>
-		<class>distrisenc.model.core.entities.ThmRolDetalle</class>
-		<class>distrisenc.model.core.entities.VenDetProforma</class>
-		<class>distrisenc.model.core.entities.VenProforma</class>
+		<class>distrisenc.model.core.entities.InventarioCa</class>
 	</persistence-unit>
 </persistence>

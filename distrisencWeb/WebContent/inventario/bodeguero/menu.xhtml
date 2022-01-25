@@ -8,14 +8,13 @@
 	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
 		type="preRenderView"></f:event>
 </f:metadata>
-<h:head></h:head>
+<h:head>Inventario</h:head>
 <body>
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Productos" icon="pi pi-briefcase" />
-			<p:menuitem value="Ingresos" icon="pi pi-step-forward" />
-			<p:menuitem value="Egressos" icon="pi pi-step-backward" />
+			<p:menuitem value="Ingresos" icon="pi pi-step-forward"  action="ingresos?faces-redirect=true"/>
+			
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -27,6 +26,6 @@
 		</p:menubar>
 		<p:staticMessage severity="info" summary="Módulo de inventario"></p:staticMessage>
 	</h:form>
-	<div></div>
+
 </body>
 </html>
