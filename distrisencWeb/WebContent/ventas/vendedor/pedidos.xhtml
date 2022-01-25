@@ -9,17 +9,17 @@
 		type="preRenderView"></f:event>
 </f:metadata>
 <h:head>
-	<title>Produccion</title>
+	<title>Pedidos</title>
 </h:head>
 <body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
 	<h:form>
-		<p:growl>
-			<p:autoUpdate />
-		</p:growl>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Productos" icon="pi pi-cog"
-				action="#{beanPrdProductos.actionCargarMenuProductos()}" />
+			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+			<p:menuitem value="Pedidos" icon="pi pi-list" action="/" />
+			<p:menuitem value="Facturas" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -29,32 +29,39 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
-		<p:staticMessage severity="info" summary="Órdenes de producción"></p:staticMessage>
+		<p:staticMessage severity="info" summary="Módulo de ventas"></p:staticMessage>
 	</h:form>
 	<div>
 		<p:panel>
 			<h:form id="formDatos">
-				<p:dataTable value="#{beanPrdOrdenes.listaOrdenes}" var="o"
+				<p:dataTable value="#{beanVenEmpleados.listaPedidos}" var="p"
 					emptyMessage="No hay registros aún.">
 					<p:column headerText="ID">
-						<h:outputText value="#{o.idOrden}" />
+						<h:outputText value="#{p.idProforma}" />
 					</p:column>
 					<p:column headerText="FECHA">
-						<h:outputText value="#{o.fecha}" />
+						<h:outputText value="#{p.fecha}" />
 					</p:column>
-					<p:column headerText="OBSERVACIONES">
-						<h:outputText value="#{o.observaciones}" />
+					<p:column headerText="TOTAL">
+						<i class="pi pi-dollar" style="font-size: 1rem"></i>
+						<h:outputText value="#{p.total}" />
 					</p:column>
 					<p:column headerText="ESTADO">
-						<h:outputText value="#{o.estado}" />
+						<h:outputText value="#{p.estado}" />
 					</p:column>
 					<p:column headerText="OPCIONES">
-						<p:commandButton icon="pi pi-check-square" value="Autorizar"
-							styleClass="ui-button-danger" update="@form"
-							actionListener="#{beanPrdOrdenes.actionListenerAutorizar(o)}"
-							disabled="#{o.estado == 'Autorizada'}">
+						<p:commandButton icon="pi pi-check-square"
+							value="Crear Orden" update="@form"
+							actionListener="#{beanVenEmpleados.actionListenerPagar50(p, 'Ninguna')}"
+							disabled="#{p.estado == 'Autorizada' || p.estado == 'Entregado'}">
+						</p:commandButton>
+						<p:commandButton icon="pi pi-check-square"
+							value="Pagado Total" styleClass="ui-button-danger"
+							update="@form"
+							actionListener="#{beanVenEmpleados.actionListenerPagarTotal(p, 'Ninguna', beanSegLogin.loginDTO.idSegUsuario)}"
+							disabled="#{p.estado == 'Pagado' || p.estado == 'Entregado'}">
 							<p:confirm header="Confirmación"
-								message="Desea marcar como Autorizada?" icon="pi pi-info-circle" />
+								message="Desea marcar como Pagado?" icon="pi pi-info-circle" />
 						</p:commandButton>
 					</p:column>
 				</p:dataTable>

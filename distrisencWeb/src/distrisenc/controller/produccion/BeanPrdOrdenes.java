@@ -9,16 +9,16 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import distrisenc.controller.JSFUtil;
-import distrisenc.model.core.entities.VenProforma;
-import distrisenc.model.ventas.managers.ManagerVentas;
+import distrisenc.model.core.entities.PrdOrden;
+import distrisenc.model.produccion.managers.ManagerProduccion;
 
 @Named
 @SessionScoped
 public class BeanPrdOrdenes implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@EJB
-	private ManagerVentas mVentas;
-	private List<VenProforma> listaPedidos;
+	private ManagerProduccion mProduccion;
+	private List<PrdOrden> listaOrdenes;
 
 	public BeanPrdOrdenes() {
 		
@@ -26,36 +26,26 @@ public class BeanPrdOrdenes implements Serializable {
 
 	@PostConstruct
 	public void inicializacion() {
-		System.out.println("BeanVenCliente inicializado...");
-		listaPedidos = mVentas.findAllProformas();
+		System.out.println("BeanPrdOrdenes inicializado...");
+		listaOrdenes = mProduccion.findAllOrdenes();
 	}
-
-	public void actionListenerPagar50(VenProforma proforma, String obs) {
+	
+	public void actionListenerAutorizar(PrdOrden orden) {
 		try {
-			mVentas.confirmarPago50(proforma, obs);
-			JSFUtil.crearMensajeINFO("Pago 50%.");
+			mProduccion.confirmarAutorizacion(orden);
+			JSFUtil.crearMensajeINFO("Pedido Autorizado.");
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
-	public void actionListenerPagarTotal(VenProforma proforma) {
-		try {
-			mVentas.confirmarPagoTotal(proforma);
-			JSFUtil.crearMensajeINFO("Pago total.");
-		} catch (Exception e) {
-			JSFUtil.crearMensajeERROR(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
-	public List<VenProforma> getlistaPedidos() {
-		return listaPedidos;
+	public List<PrdOrden> getListaOrdenes() {
+		return listaOrdenes;
 	}
 
-	public void setlistaPedidos(List<VenProforma> listaPedidos) {
-		this.listaPedidos = listaPedidos;
+	public void setListaOrdenes(List<PrdOrden> listaOrdenes) {
+		this.listaOrdenes = listaOrdenes;
 	}
 
 }

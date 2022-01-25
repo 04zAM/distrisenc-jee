@@ -1,6 +1,7 @@
 package distrisenc.model.ventas.managers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,19 +13,22 @@ import distrisenc.model.auditoria.managers.ManagerAuditoria;
 import distrisenc.model.core.entities.PrdOrden;
 import distrisenc.model.core.entities.PrdProducto;
 import distrisenc.model.core.entities.SegUsuario;
+import distrisenc.model.core.entities.VenDetFactura;
 import distrisenc.model.core.entities.VenDetProforma;
+import distrisenc.model.core.entities.VenFactura;
 import distrisenc.model.core.entities.VenProforma;
 import distrisenc.model.core.managers.ManagerDAO;
 import distrisenc.model.core.utils.ModelUtil;
 import distrisenc.model.ventas.dtos.CarritoDTO;
 
 /**
- * Implementa la logica de manejo de usuarios y autenticacion.
- * Funcionalidades principales:
+ * Implementa la logica de manejo de usuarios y autenticacion. Funcionalidades
+ * principales:
  * <ul>
- * 	<li>Verificacion de credenciales de usuario.</li>
- *  <li>Asignacion de modulos a un usuario.</li>
+ * <li>Verificacion de credenciales de usuario.</li>
+ * <li>Asignacion de modulos a un usuario.</li>
  * </ul>
+ * 
  * @author evasquez
  */
 @Stateless
@@ -34,76 +38,115 @@ public class ManagerVentas {
 	private ManagerDAO mDAO;
 	@EJB
 	private ManagerAuditoria mAuditoria;
-	
+
 	private CarritoDTO carrito;
-    /**
-     * Default constructor. 
-     */
-    public ManagerVentas() {
-        carrito = new CarritoDTO();
-    }
-    
-    public List<PrdProducto> findAllProductos(){
-    	return mDAO.findAll(PrdProducto.class, "nombre");
-    }
-    
-    public List<VenProforma> findAllProformas(){
-    	return mDAO.findAll(VenProforma.class, "idProforma");
-    }
-    
-    public List<VenDetProforma> findCarritoProducts(){
-    	return carrito.getListaDetalles();
-    }
-    
-    public void agregarDetalle(PrdProducto nuevoProducto, int cant) throws Exception {
-    	VenDetProforma detalle = new VenDetProforma();
-    	detalle.setPrdProducto(nuevoProducto);
-    	detalle.setCantidad(cant);
-    	double total = cant * nuevoProducto.getVenta().doubleValue();
-    	detalle.setTotal(new BigDecimal(total));
-    	carrito.getListaDetalles().add(detalle);
-    	carrito.setTotal(total);
-    }
-    
-    public void eliminarDetalle(VenDetProforma detalle) throws Exception {
-    	carrito.getListaDetalles().remove(carrito.getListaDetalles().indexOf(detalle));
-    }
-    
-    public void confirmarPedido(int cliente, String obs) throws Exception {
-    	SegUsuario usuario = (SegUsuario) mDAO.findById(SegUsuario.class, cliente);
-    	VenProforma proforma = new VenProforma();
-    	proforma.setVenDetProformas(carrito.getListaDetalles());
-    	proforma.setEstado("Confirmado");
-    	proforma.setTotal(new BigDecimal(carrito.getTotal()));
-    	proforma.setSegUsuario(usuario);
-    	proforma.setFecha(new Date());
-    	proforma.setObservaciones(obs);
-    	mDAO.insertar(proforma);
-    	for (VenDetProforma det : carrito.getListaDetalles()) {
-    		det.setVenProforma(proforma);
+
+	/**
+	 * Default constructor.
+	 */
+	public ManagerVentas() {
+		carrito = new CarritoDTO();
+	}
+
+	public List<PrdProducto> findAllProductos() {
+		return mDAO.findAll(PrdProducto.class, "nombre");
+	}
+
+	public List<VenProforma> findAllProformas() {
+		return mDAO.findAll(VenProforma.class, "idProforma");
+	}
+
+	public List<VenDetProforma> findCarritoProducts() {
+		return carrito.getListaDetalles();
+	}
+
+	public void agregarDetalle(VenDetProforma nuevoDetalle) throws Exception {
+		boolean esNuevo = true;
+		VenDetProforma detalle = new VenDetProforma();
+		PrdProducto producto = new PrdProducto();
+		producto = nuevoDetalle.getPrdProducto();
+		detalle.setPrdProducto(producto);
+		int cantidad = nuevoDetalle.getCantidad();
+		producto.setStock(producto.getStock().subtract(new BigDecimal(cantidad)));
+		mDAO.actualizar(producto);
+		detalle.setCantidad(cantidad);
+		detalle.setTotal(nuevoDetalle.getTotal());
+		if (!carrito.getListaDetalles().isEmpty()) {
+			for (VenDetProforma det : carrito.getListaDetalles()) {
+				if (det.getPrdProducto().equals(detalle.getPrdProducto())) {
+					esNuevo = false;
+					det.setCantidad(det.getCantidad() + detalle.getCantidad());
+					det.setTotal(det.getTotal().add(detalle.getTotal()));
+					break;
+				}
+			}
+		}
+		if (esNuevo) {
+			System.out.println("Se ha agregado " + nuevoDetalle.getCantidad() + " producto/s "
+					+ nuevoDetalle.getPrdProducto().getNombre() + " a la cesta");
+			carrito.getListaDetalles().add(detalle);
+			carrito.setTotal(carrito.getTotal().add(detalle.getTotal()));
+		}
+	}
+
+	public void eliminarDetalle(VenDetProforma detalle) throws Exception {
+		carrito.getListaDetalles().remove(carrito.getListaDetalles().indexOf(detalle));
+	}
+
+	public void confirmarPedido(int cliente, String obs) throws Exception {
+		SegUsuario usuario = (SegUsuario) mDAO.findById(SegUsuario.class, cliente);
+		VenProforma proforma = new VenProforma();
+		proforma.setVenDetProformas(carrito.getListaDetalles());
+		proforma.setEstado("Confirmado");
+		proforma.setTotal(carrito.getTotal());
+		proforma.setSegUsuario(usuario);
+		proforma.setFecha(new Date());
+		proforma.setObservaciones(obs);
+		mDAO.insertar(proforma);
+		for (VenDetProforma det : carrito.getListaDetalles()) {
+			det.setVenProforma(proforma);
 			mDAO.insertar(det);
 		}
-    }
-    
-    public void confirmarPago50(VenProforma proforma, String obs) throws Exception {
-    	proforma.setEstado("Pagado 50%");
-    	mDAO.actualizar(proforma);
-    	PrdOrden orden = new PrdOrden();
-    	orden.setEstado("Pendiente");
-    	orden.setFecha(new Date());
-    	orden.setObservaciones(obs);
-    	orden.setVenProforma(proforma);
-    	mDAO.insertar(orden);
-    }
-    
-    public void confirmarPagoTotal(VenProforma proforma) throws Exception {
-    	proforma.setEstado("Pagado");
-    	mDAO.actualizar(proforma);
-    }
-    
-    public void confirmarEntrega(VenProforma proforma) throws Exception {
-    	proforma.setEstado("Entregado");
-    	mDAO.actualizar(proforma);
-    }
+	}
+
+	public void autorizarProforma(VenProforma proforma, String obs) throws Exception {
+		proforma.setEstado("Autorizada");
+		mDAO.actualizar(proforma);
+		PrdOrden orden = new PrdOrden();
+		orden.setEstado("Pendiente");
+		orden.setFecha(new Date());
+		orden.setObservaciones(obs);
+		orden.setVenProforma(proforma);
+		mDAO.insertar(orden);
+	}
+
+	public void confirmarPagoTotal(VenProforma proforma, String obs, int usuario) throws Exception {
+		SegUsuario vendedor = (SegUsuario) mDAO.findById(SegUsuario.class, usuario);
+		proforma.setEstado("Pagado");
+		mDAO.actualizar(proforma);
+		VenFactura factura = new VenFactura();
+		factura.setEstado("Activa");
+		factura.setFecha(new Date());
+		factura.setObservaciones(obs);
+		factura.setSegUsuario(vendedor);
+		factura.setTotal(proforma.getTotal());
+		List<VenDetFactura> detallesFactura = new ArrayList<>();
+		for (int i = 0; i < detallesFactura.size(); i++) {
+			VenDetFactura detalleFactura = new VenDetFactura();
+			detalleFactura.setCantidad(proforma.getVenDetProformas().get(i).getCantidad());
+			detalleFactura.setPrdProducto(proforma.getVenDetProformas().get(i).getPrdProducto());
+			detalleFactura.setTotal(proforma.getVenDetProformas().get(i).getTotal());
+			detalleFactura.setVenFactura(factura);
+			detallesFactura.set(i, detalleFactura);
+			mDAO.insertar(detalleFactura);
+		}
+		factura.setVenDetFacturas(detallesFactura);
+		mDAO.insertar(factura);
+	}
+
+	public void confirmarEntrega(VenProforma proforma) throws Exception {
+		proforma.setEstado("Entregado");
+		mDAO.actualizar(proforma);
+	}
 
 }

@@ -48,17 +48,9 @@
 					<h:outputText value="#{p.venta}" />
 				</p:column>
 				<p:column headerText="Opciones">
-					<p:overlayPanel for="cmdCantidad" showCloseIcon="true">
-						<p:panelGrid columns="1">
-							<h:outputText value="Cantidad:" />
-							<p:inputNumber value="#{beanVenClientes.cantidad}" required="true"
-								requiredMessage="Ingrese la cantidad." minValue="1" maxValue="999"/>
-							<p:commandButton value="Agregar" icon="pi pi-save" update="@form"
-								actionListener="#{beanVenClientes.actionListenerAgregarProducto(p)}"></p:commandButton>
-						</p:panelGrid>
-					</p:overlayPanel>
 					<p:commandButton icon="pi pi-shopping-cart"
-						value="Agregar al Carrito" id="cmdCantidad">
+						value="Agregar al Carrito" id="cmdCantidad"
+						action="#{beanVenClientes.actionAgregarProducto(p)}">
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>

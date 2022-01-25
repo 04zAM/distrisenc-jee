@@ -62,7 +62,7 @@ public class ManagerAlquileres {
     	double total = cant * nuevoProducto.getVenta().doubleValue();
     	detalle.setTotal(new BigDecimal(total));
     	carrito.getListaDetalles().add(detalle);
-    	carrito.setTotal(total);
+		carrito.setTotal(carrito.getTotal().add(detalle.getTotal()));
     }
     
     public void eliminarDetalle(VenDetProforma detalle) throws Exception {
@@ -74,7 +74,7 @@ public class ManagerAlquileres {
     	VenProforma proforma = new VenProforma();
     	proforma.setVenDetProformas(carrito.getListaDetalles());
     	proforma.setEstado("Confirmado");
-    	proforma.setTotal(new BigDecimal(carrito.getTotal()));
+    	proforma.setTotal(carrito.getTotal());
     	proforma.setSegUsuario(usuario);
     	proforma.setFecha(new Date());
     	proforma.setObservaciones(obs);
