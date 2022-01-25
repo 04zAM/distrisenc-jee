@@ -78,7 +78,7 @@ public class BeanPrdProductos implements Serializable {
 	}
 	
 	public void checkMessage() {
-        String summary = nuevoProducto.getVendible() ? "Marcado como Vendible" : "Marcado como Materia Prima";
+        String summary = nuevoProducto.getVendible() ? "Marcado como Disponible" : "Marcado como Materia Prima";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
     }
 
