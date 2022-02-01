@@ -17,9 +17,10 @@
 	</p:growl>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
+			<p:menuitem value="Regresar" icon="pi pi-arrow-left" action="#{beanVenEmpleados.actionCargarMenu()}" />
 			<p:menuitem value="Pedidos" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuPedidos()}" />
 			<p:menuitem value="Facturas" icon="pi pi-list" action="/" />
+			<p:menuitem value="Registrar Nueva" icon="pi pi-plus" action="#{beanVenEmpleados.actionCargarFormFactura()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -34,10 +35,13 @@
 	<div>
 		<p:panel>
 			<h:form id="formDatos">
-				<p:dataTable value="#{beanVenEmpleados.listaPedidos}" var="p"
+				<p:dataTable value="#{beanVenEmpleados.listaFacturas}" var="p"
 					emptyMessage="No hay registros aún.">
 					<p:column headerText="ID">
-						<h:outputText value="#{p.idProforma}" />
+						<h:outputText value="#{p.idFactura}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{p.segUsuario.nombres}" />
 					</p:column>
 					<p:column headerText="FECHA">
 						<h:outputText value="#{p.fecha}" />
@@ -50,18 +54,8 @@
 						<h:outputText value="#{p.estado}" />
 					</p:column>
 					<p:column headerText="OPCIONES">
-						<p:commandButton icon="pi pi-check-square" value="Crear Orden"
-							update="@form"
-							actionListener="#{beanVenEmpleados.actionListenerPagar50(p, 'Ninguna')}"
-							disabled="#{p.estado == 'Autorizada' || p.estado == 'Entregado'}">
-						</p:commandButton>
-						<p:commandButton icon="pi pi-check-square" value="Pagado Total"
-							styleClass="ui-button-danger" update="@form"
-							actionListener="#{beanVenEmpleados.actionListenerPagarTotal(p, 'Ninguna', beanSegLogin.loginDTO.idSegUsuario)}"
-							disabled="#{p.estado == 'Pagado' || p.estado == 'Entregado'}">
-							<p:confirm header="Confirmación"
-								message="Desea marcar como Pagado?" icon="pi pi-info-circle" />
-						</p:commandButton>
+						<p:commandButton icon="pi pi-file-pdf"
+							value="Vizualizar" />
 					</p:column>
 				</p:dataTable>
 			</h:form>

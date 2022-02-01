@@ -9,7 +9,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import distrisenc.controller.JSFUtil;
+import distrisenc.model.core.entities.PrdProducto;
 import distrisenc.model.core.entities.SegUsuario;
+import distrisenc.model.core.entities.VenFactura;
 import distrisenc.model.core.entities.VenProforma;
 import distrisenc.model.ventas.managers.ManagerVentas;
 
@@ -20,6 +22,9 @@ public class BeanVenEmpleados implements Serializable {
 	@EJB
 	private ManagerVentas mVentas;
 	private List<VenProforma> listaPedidos;
+	private List<VenFactura> listaFacturas;
+	private List<PrdProducto> listaProductos;
+	private String observacion;
 
 	public BeanVenEmpleados() {
 
@@ -28,45 +33,76 @@ public class BeanVenEmpleados implements Serializable {
 	@PostConstruct
 	public void inicializacion() {
 		System.out.println("BeanVenCliente inicializado...");
-		listaPedidos = mVentas.findAllProformas();
+		listaPedidos = mVentas.findAllPedidos();
+		observacion = "Ninguna";
 	}
 
+	public String actionCargarMenu() {
+		listaPedidos = mVentas.findAllPedidos();
+		return "menu";
+	}
+	
 	public String actionCargarMenuPedidos() {
 		listaPedidos = mVentas.findAllProformas();
 		return "pedidos?faces-redirect=true";
 	}
 
 	public String actionCargarMenuFacturas() {
-		listaPedidos = mVentas.findAllProformas();
+		listaFacturas = mVentas.findAllFacturas();
 		return "facturas?faces-redirect=true";
 	}
+	
+	public String actionCargarFormFactura() {
+		listaProductos = mVentas.findAllProductos();
+		return "formulario?faces-redirect=true";
+	}
 
-	public void actionListenerPagar50(VenProforma proforma, String obs) {
+	public void actionListenerAutorizarProforma(VenProforma proforma) {
 		try {
-			mVentas.autorizarProforma(proforma, obs);
-			JSFUtil.crearMensajeINFO("Enviada a produccion.");
+			mVentas.autorizarProforma(proforma, observacion);
+			JSFUtil.crearMensajeINFO("Se ha generado una orden de la proforma: " + proforma.getIdProforma()
+			+ ". \nCon observacion: " + observacion);
+			listaPedidos = mVentas.findAllPedidos();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
-	public void actionListenerPagarTotal(VenProforma proforma, String obs, int usuario) {
+	public void actionListenerPagarProforma(VenProforma proforma, int usuario) {
 		try {
-			mVentas.confirmarPagoTotal(proforma, obs, usuario);
-			JSFUtil.crearMensajeINFO("Pago total.");
+			mVentas.confirmarPagoTotal(proforma, observacion, usuario);
+			JSFUtil.crearMensajeINFO("Se ha generado una factura de la proforma: " + proforma.getIdProforma()
+					+ ". \nCon observacion: " + observacion);
+			listaPedidos = mVentas.findAllPedidos();
 		} catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
-	public List<VenProforma> getlistaPedidos() {
+	public List<VenProforma> getListaPedidos() {
 		return listaPedidos;
 	}
 
-	public void setlistaPedidos(List<VenProforma> listaPedidos) {
+	public void setListaPedidos(List<VenProforma> listaPedidos) {
 		this.listaPedidos = listaPedidos;
+	}
+
+	public List<VenFactura> getListaFacturas() {
+		return listaFacturas;
+	}
+
+	public void setListaFacturas(List<VenFactura> listaFacturas) {
+		this.listaFacturas = listaFacturas;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
 	}
 
 }

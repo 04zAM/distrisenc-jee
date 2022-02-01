@@ -51,9 +51,17 @@ public class ManagerVentas {
 	public List<PrdProducto> findAllProductos() {
 		return mDAO.findAll(PrdProducto.class, "nombre");
 	}
+	
+	public List<VenFactura> findAllFacturas() {
+		return mDAO.findAll(VenFactura.class, "idFactura");
+	}
 
 	public List<VenProforma> findAllProformas() {
 		return mDAO.findAll(VenProforma.class, "idProforma");
+	}
+	
+	public List<VenProforma> findAllPedidos() {
+		return mDAO.findWhere(VenProforma.class, "o.estado!='Pagado' AND o.estado!='Entregado'", "o.idProforma");
 	}
 
 	public List<VenDetProforma> findCarritoProducts() {
@@ -109,9 +117,11 @@ public class ManagerVentas {
 		}
 	}
 
-	public void autorizarProforma(VenProforma proforma, String obs) throws Exception {
-		proforma.setEstado("Autorizada");
+	public void autorizarProforma(VenProforma p, String obs) throws Exception {
+		VenProforma proforma = (VenProforma) mDAO.findById(VenProforma.class, p.getIdProforma());
+		proforma.setEstado("Autorizado");
 		mDAO.actualizar(proforma);
+		System.out.println("Proforma: " + proforma.getIdProforma() + " " + proforma.getEstado() + "...");
 		PrdOrden orden = new PrdOrden();
 		orden.setEstado("Pendiente");
 		orden.setFecha(new Date());
@@ -120,10 +130,12 @@ public class ManagerVentas {
 		mDAO.insertar(orden);
 	}
 
-	public void confirmarPagoTotal(VenProforma proforma, String obs, int usuario) throws Exception {
+	public void confirmarPagoTotal(VenProforma p, String obs, int usuario) throws Exception {
 		SegUsuario vendedor = (SegUsuario) mDAO.findById(SegUsuario.class, usuario);
+		VenProforma proforma = (VenProforma) mDAO.findById(VenProforma.class, p.getIdProforma());
 		proforma.setEstado("Pagado");
 		mDAO.actualizar(proforma);
+		System.out.println("Proforma: " + proforma.getIdProforma() + " " + proforma.getEstado() + "...");
 		VenFactura factura = new VenFactura();
 		factura.setEstado("Activa");
 		factura.setFecha(new Date());

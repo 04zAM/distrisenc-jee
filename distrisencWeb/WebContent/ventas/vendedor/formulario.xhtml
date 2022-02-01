@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:event listener="#{beanSegLogin.actionVerificarLogin()}"
+		type="preRenderView"></f:event>
+</f:metadata>
+<h:head>
+	<title>Factura</title>
+</h:head>
+<body>
+	<p:growl>
+		<p:autoUpdate />
+	</p:growl>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Regresar" icon="pi pi-shopping-cart"
+				action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
+			<p:menuitem value="Confirmar Pedido" icon="pi pi-plus"
+				id="cmdConfirmacion"
+				actionListener="#{beanVenClientes.actionListenerConfirmarPedido(beanSegLogin.loginDTO.idSegUsuario)}">
+				<p:confirm header="Confirmación"
+					message="Desea confirmar el pedido?" icon="pi pi-info-circle" />
+			</p:menuitem>
+			<f:facet name="options">
+				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
+					icon="pi pi-user">
+					<p:menuitem value="Perfil" icon="pi pi-cog"></p:menuitem>
+					<p:menuitem value="Cerrar sesión" icon="pi pi-sign-out"
+						action="#{beanSegLogin.actionCerrarSesion()}"></p:menuitem>
+				</p:menuButton>
+			</f:facet>
+		</p:menubar>
+	</h:form>
+	<p:panel>
+		<h:form id="formDatos">
+			<p:dataTable value="#{beanVenClientes.listaProductosCarrito}" var="d"
+				emptyMessage="No hay registros aún.">
+				<p:column headerText="Nombre">
+					<h:outputText value="#{d.prdProducto.nombre}" />
+				</p:column>
+				<p:column headerText="Precio">
+					<i class="pi pi-dollar" style="font-size: 1rem"></i>
+					<h:outputText value="#{d.prdProducto.venta}" />
+				</p:column>
+				<p:column headerText="Cantidad">
+					<h:outputText value="#{d.cantidad}" />
+				</p:column>
+				<p:column headerText="Subtotal">
+					<i class="pi pi-dollar" style="font-size: 1rem"></i>
+					<h:outputText value="#{d.total}" />
+				</p:column>
+				<p:column headerText="Opciones">
+					<p:commandButton icon="pi pi-times-circle" title="eliminar"
+						styleClass="ui-button-danger" update="@form"
+						actionListener="#{beanVenClientes.actionListenerEliminarProducto(d)}">
+						<p:confirm header="Confirmación"
+							message="Desea quitar este producto?" icon="pi pi-info-circle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<h:outputText value="Observaciones: " />
+			<p:inputTextarea value="#{beanVenClientes.carrito.observaciones}" />
+			<h:outputText value=" " />
+			<h:outputText value="Total: #{beanVenClientes.carrito.total}" />
+		</h:form>
+	</p:panel>
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+		responsive="true" width="350">
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirmdialog-no ui-button-flat" />
+		<p:commandButton value="Sí" type="button"
+			styleClass="ui-confirmdialog-yes" />
+	</p:confirmDialog>
+</body>
+</html>

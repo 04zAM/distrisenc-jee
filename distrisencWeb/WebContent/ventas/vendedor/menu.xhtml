@@ -18,8 +18,10 @@
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Pedidos" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuPedidos()}" />
-			<p:menuitem value="Facturas" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
+			<p:menuitem value="Pedidos" icon="pi pi-list"
+				action="#{beanVenEmpleados.actionCargarMenuPedidos()}" />
+			<p:menuitem value="Facturas" icon="pi pi-list"
+				action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -29,15 +31,18 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
-		<p:staticMessage severity="info" summary="Módulo de ventas"></p:staticMessage>
+		<p:staticMessage severity="info" summary="Pedidos Confirmados"></p:staticMessage>
 	</h:form>
 	<div>
 		<p:panel>
-			<h:form id="formDatos">
+			<h:form>
 				<p:dataTable value="#{beanVenEmpleados.listaPedidos}" var="p"
 					emptyMessage="No hay registros aún.">
 					<p:column headerText="ID">
 						<h:outputText value="#{p.idProforma}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{p.segUsuario.nombres}" />
 					</p:column>
 					<p:column headerText="FECHA">
 						<h:outputText value="#{p.fecha}" />
@@ -51,17 +56,40 @@
 					</p:column>
 					<p:column headerText="OPCIONES">
 						<p:commandButton icon="pi pi-check-square" value="Crear Orden"
-							update="@form"
-							actionListener="#{beanVenEmpleados.actionListenerPagar50(p, 'Ninguna')}"
-							disabled="#{p.estado == 'Autorizada' || p.estado == 'Entregado'}">
-						</p:commandButton>
-						<p:commandButton icon="pi pi-check-square" value="Pagado Total"
-							styleClass="ui-button-danger" update="@form"
-							actionListener="#{beanVenEmpleados.actionListenerPagarTotal(p, 'Ninguna', beanSegLogin.loginDTO.idSegUsuario)}"
-							disabled="#{p.estado == 'Pagado' || p.estado == 'Entregado'}">
-							<p:confirm header="Confirmación"
-								message="Desea marcar como Pagado?" icon="pi pi-info-circle" />
-						</p:commandButton>
+							disabled="#{p.estado == 'Autorizado'}"
+							onclick="PF('dlg1').show();" />
+						<p:dialog widgetVar="dlg1" showEffect="fade">
+							<h:panelGrid columns="2">
+								<h:outputLabel for="observacion1" value="Observaciones:" />
+								<p:inputText id="observacion1"
+									value="#{beanVenEmpleados.observacion}" />
+								<f:facet name="footer">
+									<p:commandButton value="Aceptar"
+										actionListener="#{beanVenEmpleados.actionListenerAutorizarProforma(p)}"
+										update="@form" oncomplete="PF('dlg1').hide();" />
+									<p:commandButton value="Cancelar" onclick="PF('dlg1').hide();" />
+								</f:facet>
+							</h:panelGrid>
+						</p:dialog>
+						<p:commandButton icon="pi pi-check-square" value="Pagado"
+							styleClass="ui-button-danger"
+							onclick="PF('dlg2').show();" />
+						<p:dialog widgetVar="dlg2" showEffect="fade">
+							<h:panelGrid columns="2">
+								<h:outputLabel for="observacion2" value="Observaciones:" />
+								<p:inputText id="observacion2"
+									value="#{beanVenEmpleados.observacion}" />
+								<f:facet name="footer">
+									<p:commandButton value="Aceptar"
+										actionListener="#{beanVenEmpleados.actionListenerPagarProforma(p, beanSegLogin.loginDTO.idSegUsuario)}"
+										update="@form" oncomplete="PF('dlg2').hide();">
+										<p:confirm header="Confirmación"
+											message="Desea marcar como Pagado?" icon="pi pi-info-circle" />
+									</p:commandButton>
+									<p:commandButton value="Cancelar" onclick="PF('dlg2').hide();" />
+								</f:facet>
+							</h:panelGrid>
+						</p:dialog>
 					</p:column>
 				</p:dataTable>
 			</h:form>
