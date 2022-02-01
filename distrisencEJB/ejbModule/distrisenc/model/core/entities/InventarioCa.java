@@ -27,14 +27,16 @@ public class InventarioCa implements Serializable {
 
 	//bi-directional many-to-one association to PrdProducto
 	@ManyToOne
+	private PrdProducto prdProducto;
+	
 	@JoinColumn(name="id_producto")
+	private Integer idProducto;
+	
 	@Column(length=50)
 	private String nombre;
 
 	@Column(length=50)
 	private String tipo;
-  
-	private PrdProducto prdProducto;
 
 	public InventarioCa() {
 	}
