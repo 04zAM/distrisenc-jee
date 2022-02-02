@@ -20,7 +20,7 @@
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
 			<p:menuitem value="Reporte" icon="pi pi-book" ajax="false"
-action="#{beanInvBodeguero.actionReporte()}" />
+			action="#{beanInvBodeguero.actionReporte()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -39,7 +39,7 @@ action="#{beanInvBodeguero.actionReporte()}" />
 				<p:selectOneMenu filterMatchMode="contains" filter="true"
 					style="width:100%"
 					value="#{beanInvBodeguero.nuevoInventario.idProducto}">
-					<f:selectItem itemLabel="Seleccione el usuario..."
+					<f:selectItem itemLabel="Seleccione el producto..."
 						noSelectionOption="true" />
 					<f:selectItems value="#{beanInvBodeguero.listaProductos}" var="u"
 						itemLabel="#{u.nombre} " itemValue="#{u.idProducto}"></f:selectItems>
