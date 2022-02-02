@@ -49,9 +49,13 @@ public class ManagerVentas {
 	}
 
 	public List<PrdProducto> findAllProductos() {
-		return mDAO.findAll(PrdProducto.class, "nombre");
+		return mDAO.findWhere(PrdProducto.class, "o.vendible=true", "o.nombre");
 	}
-	
+
+	public List<SegUsuario> findAllClientes() {
+		return mDAO.findAll(SegUsuario.class, "idSegUsuario");
+	}
+
 	public List<VenFactura> findAllFacturas() {
 		return mDAO.findAll(VenFactura.class, "idFactura");
 	}
@@ -59,13 +63,30 @@ public class ManagerVentas {
 	public List<VenProforma> findAllProformas() {
 		return mDAO.findAll(VenProforma.class, "idProforma");
 	}
-	
+
 	public List<VenProforma> findAllPedidos() {
 		return mDAO.findWhere(VenProforma.class, "o.estado!='Pagado' AND o.estado!='Entregado'", "o.idProforma");
 	}
 
 	public List<VenDetProforma> findCarritoProducts() {
 		return carrito.getListaDetalles();
+	}
+
+	public void guardarFacturaVenta(VenFactura nuevaFactura) throws Exception {
+		VenFactura factura = new VenFactura();
+		factura.setEstado("Activa");
+		factura.setFecha(new Date());
+		factura.setObservaciones(nuevaFactura.getObservaciones());
+		SegUsuario cliente = (SegUsuario) mDAO.findById(SegUsuario.class,
+				nuevaFactura.getSegUsuario().getIdSegUsuario());
+		factura.setSegUsuario(cliente);
+		factura.setTotal(nuevaFactura.getTotal());
+		factura.setVenDetFacturas(nuevaFactura.getVenDetFacturas());
+		mDAO.insertar(factura);
+		for (VenDetFactura detalle : factura.getVenDetFacturas()) {
+			detalle.setVenFactura(factura);
+			mDAO.insertar(detalle);
+		}
 	}
 
 	public void agregarDetalle(VenDetProforma nuevoDetalle) throws Exception {

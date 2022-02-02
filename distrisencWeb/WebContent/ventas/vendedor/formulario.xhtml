@@ -15,15 +15,16 @@
 	<p:growl>
 		<p:autoUpdate />
 	</p:growl>
-	<h:form>
+	<h:form id="menu">
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-shopping-cart"
+			<p:menuitem value="Regresar" icon="pi pi-arrow-left"
 				action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
-			<p:menuitem value="Confirmar Pedido" icon="pi pi-plus"
+			<p:menuitem value="Guardar Factura" icon="pi pi-plus"
 				id="cmdConfirmacion"
-				actionListener="#{beanVenClientes.actionListenerConfirmarPedido(beanSegLogin.loginDTO.idSegUsuario)}">
-				<p:confirm header="Confirmación"
-					message="Desea confirmar el pedido?" icon="pi pi-info-circle" />
+				disabled="#{beanVenEmpleados.listaFacDetalles.isEmpty()}"
+				actionListener="#{beanVenEmpleados.actionListenerGuardarFactura()}">
+				<p:confirm header="Confirmación" message="Desea Facturar?"
+					icon="pi pi-info-circle" />
 			</p:menuitem>
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -36,8 +37,56 @@
 		</p:menubar>
 	</h:form>
 	<p:panel>
+		<h:form>
+			<p:panelGrid columns="4">
+				<h:outputText value="Factura No:" />
+				<p:inputText value="000-#{beanVenEmpleados.listaFacturas.size()}"
+					disabled="true" />
+				<h:outputText value="Cliente:" />
+				<p:selectOneMenu id="cliente"
+					converter="omnifaces.SelectItemsConverter"
+					value="#{beanVenEmpleados.nuevaFactura.segUsuario}" filter="true"
+					filterMatchMode="startsWith">
+					<p:ajax
+						listener="#{beanVenEmpleados.actionListenerSeleccionarCliente()}" />
+					<f:selectItem itemLabel="Seleccione Uno" noSelectionOption="true"
+						itemValue="#{null}" />
+					<f:selectItems value="#{beanVenEmpleados.listaClientes}"
+						var="cliente" itemLabel="#{cliente.correo}" itemValue="#{cliente}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+		</h:form>
+		<hr />
+		<h:form id="form">
+			<p:panelGrid columns="7">
+				<h:outputText value="Producto:" />
+				<p:selectOneMenu id="producto"
+					converter="omnifaces.SelectItemsConverter"
+					value="#{beanVenEmpleados.nuevoDetalle.prdProducto}" filter="true"
+					filterMatchMode="startsWith">
+					<p:ajax
+						listener="#{beanVenEmpleados.actionListenerSeleccionarProducto()}"
+						update="form" />
+					<f:selectItem itemLabel="Seleccione Uno" noSelectionOption="true"
+						itemValue="#{null}" />
+					<f:selectItems value="#{beanVenEmpleados.listaProductos}"
+						var="producto" itemLabel="#{producto.nombre}"
+						itemValue="#{producto}" />
+				</p:selectOneMenu>
+				<h:outputText value="Cantidad:" />
+				<p:inputNumber value="#{beanVenEmpleados.nuevoDetalle.cantidad}"
+					minValue="1" padControl="false" />
+				<h:outputText value="Precio:" />
+				<p:inputNumber
+					value="#{beanVenEmpleados.nuevoDetalle.prdProducto.venta}"
+					minValue="1" />
+				<p:commandButton value="Agregar" icon="pi pi-plus"
+					update="menu form formDatos"
+					actionListener="#{beanVenEmpleados.actionListenerAgregarDetalle()}"></p:commandButton>
+			</p:panelGrid>
+		</h:form>
 		<h:form id="formDatos">
-			<p:dataTable value="#{beanVenClientes.listaProductosCarrito}" var="d"
+			<p:dataTable value="#{beanVenEmpleados.listaFacDetalles}" var="d"
 				emptyMessage="No hay registros aún.">
 				<p:column headerText="Nombre">
 					<h:outputText value="#{d.prdProducto.nombre}" />
@@ -55,17 +104,21 @@
 				</p:column>
 				<p:column headerText="Opciones">
 					<p:commandButton icon="pi pi-times-circle" title="eliminar"
-						styleClass="ui-button-danger" update="@form"
-						actionListener="#{beanVenClientes.actionListenerEliminarProducto(d)}">
+						styleClass="ui-button-danger" update="@form,:formDatos"
+						actionListener="#{beanVenEmpleados.actionListenerQuitarDetalle(d)}">
 						<p:confirm header="Confirmación"
 							message="Desea quitar este producto?" icon="pi pi-info-circle" />
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
-			<h:outputText value="Observaciones: " />
-			<p:inputTextarea value="#{beanVenClientes.carrito.observaciones}" />
-			<h:outputText value=" " />
-			<h:outputText value="Total: #{beanVenClientes.carrito.total}" />
+			<p:panelGrid columns="4">
+				<h:outputText value="Observaciones: " />
+				<p:inputTextarea
+					value="#{beanVenEmpleados.observacion}" />
+				<h:outputText value="Total:" />
+				<p:inputText disabled="true"
+					value="#{beanVenEmpleados.nuevaFactura.total}" />
+			</p:panelGrid>
 		</h:form>
 	</p:panel>
 	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"

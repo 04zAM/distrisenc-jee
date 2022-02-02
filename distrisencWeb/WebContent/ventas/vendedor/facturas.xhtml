@@ -19,7 +19,6 @@
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-arrow-left" action="#{beanVenEmpleados.actionCargarMenu()}" />
 			<p:menuitem value="Pedidos" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuPedidos()}" />
-			<p:menuitem value="Facturas" icon="pi pi-list" action="/" />
 			<p:menuitem value="Registrar Nueva" icon="pi pi-plus" action="#{beanVenEmpleados.actionCargarFormFactura()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -52,6 +51,9 @@
 					</p:column>
 					<p:column headerText="ESTADO">
 						<h:outputText value="#{p.estado}" />
+					</p:column>
+					<p:column headerText="OBSERVACIONES">
+						<h:outputText value="#{p.observaciones}" />
 					</p:column>
 					<p:column headerText="OPCIONES">
 						<p:commandButton icon="pi pi-file-pdf"
