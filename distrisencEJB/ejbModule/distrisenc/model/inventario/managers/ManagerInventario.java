@@ -32,30 +32,28 @@ public class ManagerInventario {
 	  return mDAO.findAll(InventarioCa.class);
   }
   
+  public List<PrdProducto> findAllPrdProductos(){
+	  return mDAO.findAll(PrdProducto.class);
+  }
+  
 
   
   
-  public InventarioCa inicializarInventario() {
+ 
+    
+  public InventarioCa insertarInventario(InventarioCa nuevoInventario) throws Exception {
 	  InventarioCa  inventario=new InventarioCa();
-	  inventario.setIdProducto(0);
-	  inventario.setNombre("");
+	  inventario.setIdProducto(nuevoInventario.getIdProducto());
+	  inventario.setNombre(nuevoInventario.getNombre());
 	  inventario.setFecha(new Date());
-	  inventario.setCantidad(0);
-	  inventario.setTipo("");
+	  inventario.setCantidad(nuevoInventario.getCantidad());
+	  inventario.setTipo(nuevoInventario.getTipo());
+	  mDAO.insertar(inventario);
 	  return inventario;
   }
   
   
 
-    
-  public void insertarInventario(InventarioCa nuevoInventario) throws Exception {
-	  
-	  //PrdProducto producto=(PrdProducto) mDAO.findById(PrdProducto.class, IdProducto);
-	  //nuevoInventario.setPrdProducto(producto);
-	  mDAO.insertar(nuevoInventario);
-  }
-  
-  
   
 
 

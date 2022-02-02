@@ -4,5 +4,6 @@
 		<jta-data-source>java:/mmarketdemoDS</jta-data-source>
 		<class>distrisenc.model.core.entities.VwThmConsultaRol</class>
 		<class>distrisenc.model.core.entities.InventarioCa</class>
+		<class>model.Biene</class>
 	</persistence-unit>
 </persistence>

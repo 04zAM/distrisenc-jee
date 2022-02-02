@@ -15,7 +15,7 @@
 	<p:growl>
 		<p:autoUpdate />
 	</p:growl>
-	<p:growl id="msg"/>
+	<p:growl id="msg" />
 	<h:form>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="menu" />
@@ -29,49 +29,61 @@
 			</f:facet>
 		</p:menubar>
 	</h:form>
-	
+
 	<div>
-	<h:form>
-	<p:panelGrid columns="4">
-			 <h:outputText value="ID Producto" />
-			 <p:inputText value="#{beanInvBodeguero.nuevoInventario.idProducto}"/>
-			 <h:outputText value="Nombre" />
-			 <p:inputText value="#{beanInvBodeguero.nuevoInventario.nombre}"/>
-			 <h:outputText value="Fecha" />
-			 <p:calendar value="#{beanInvBodeguero.nuevoInventario.fecha}"/>
-			 <h:outputText value="Cantidad" />
-			 <p:inputText value="#{beanInvBodeguero.nuevoInventario.cantidad}" />
-			 <h:outputText value="Accion" />
-			 
-			 
-			   <p:selectOneMenu id="option" value="#{beanInvBodeguero.nuevoInventario.tipo}">
-                    <f:selectItem itemLabel="-" itemValue=""/>
-                    <f:selectItem itemLabel="Ingreso" itemValue="Ingreso"/>
-                </p:selectOneMenu>
-			  <p:commandButton value="Guardar" icon=" pi pi-save"  
-			  actionListener="#{beanInvBodeguero.actionListenerInsertarInven()}"/>
-		</p:panelGrid>
-		</h:form>
 		<h:form>
-		<p:dataTable value="#{beanInvBodeguero.listaInventario}" var="i" widgetVar="customersTable">
-			<p:column headerText="ID" >
-		<h:outputText value="#{i.idProducto}" />
-			</p:column>
-			<p:column headerText="Nombre" sortBy="#{i.nombre}" filterBy="#{i.nombre}">
-			<h:outputText value="#{i.nombre}" />
-			</p:column>
-			<p:column headerText="Fecha" >
-			<h:outputText value="#{i.fecha}" />
-			</p:column>
-			<p:column headerText="Cantidad">
-			<h:outputText value="#{i.cantidad}" />
-			</p:column>
-			<p:column headerText="Accion">
-			<h:outputText value="#{i.tipo}" />
-			</p:column>
-		</p:dataTable>
-</h:form>
-		
+			<p:panelGrid columns="4">
+				<h:outputText value="Producto" />
+				<p:selectOneMenu filterMatchMode="contains" filter="true"
+					style="width:100%"
+					value="#{beanInvBodeguero.nuevoInventario.idProducto}">
+					<f:selectItem itemLabel="Seleccione el usuario..."
+						noSelectionOption="true" />
+					<f:selectItems value="#{beanInvBodeguero.listaProductos}" var="u"
+						itemLabel="#{u.nombre} " itemValue="#{u.idProducto}"></f:selectItems>
+				</p:selectOneMenu>
+				<h:outputText value="Nombre del Personal" />
+				<p:inputText value="#{beanInvBodeguero.nuevoInventario.nombre}" required="true"/>
+				<h:outputText value="Fecha" />
+				<p:calendar value="#{beanInvBodeguero.nuevoInventario.fecha}" />
+				<h:outputText value="Cantidad" />
+				<p:spinner value="#{beanInvBodeguero.nuevoInventario.cantidad}" />
+				<h:outputText value="Accion" />
+				<p:selectOneMenu id="option"
+					value="#{beanInvBodeguero.nuevoInventario.tipo}">
+					<f:selectItem itemLabel="Seleccione ...."
+						noSelectionOption="true" />
+					<f:selectItem itemLabel="Ingreso" itemValue="Ingreso" />
+				</p:selectOneMenu>
+
+
+
+				<p:commandButton value="Guardar" icon=" pi pi-save" update="@form:,formDatos"
+					actionListener="#{beanInvBodeguero.actionListenerInsertarInven()}" />
+			</p:panelGrid>
+		</h:form>
+		<h:form id="formDatos">
+			<p:dataTable value="#{beanInvBodeguero.listaInventario}" var="i"
+				widgetVar="customersTable">
+				<p:column headerText="ID">
+					<h:outputText value="#{i.idProducto}" />
+				</p:column>
+				<p:column headerText="Nombre" sortBy="#{i.nombre}"
+					filterBy="#{i.nombre}">
+					<h:outputText value="#{i.nombre}" />
+				</p:column>
+				<p:column headerText="Fecha">
+					<h:outputText value="#{i.fecha}" />
+				</p:column>
+				<p:column headerText="Cantidad">
+					<h:outputText value="#{i.cantidad}" />
+				</p:column>
+				<p:column headerText="Accion">
+					<h:outputText value="#{i.tipo}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
 	</div>
 
 </body>

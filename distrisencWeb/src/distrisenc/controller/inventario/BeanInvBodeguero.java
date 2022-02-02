@@ -29,10 +29,14 @@ import distrisenc.model.produccion.managers.ManagerProduccion;
 @Named
 @SessionScoped
 public class BeanInvBodeguero implements Serializable {
+	
 	@EJB
 	private ManagerInventario mInventario;
 	private InventarioCa nuevoInventario;
 	private List<InventarioCa> listaInventario;
+	
+	private List<PrdProducto> ListaProductos;
+	
 
 
 	
@@ -44,7 +48,9 @@ public class BeanInvBodeguero implements Serializable {
 	@PostConstruct
 	public void inicializar() {
 		listaInventario=mInventario.findAllInventarioCas();
-		nuevoInventario=mInventario.inicializarInventario();
+		nuevoInventario=new InventarioCa();
+		
+		ListaProductos=mInventario.findAllPrdProductos();
 
 	}
 	
@@ -53,6 +59,7 @@ public class BeanInvBodeguero implements Serializable {
 			mInventario.insertarInventario(nuevoInventario);
 			JSFUtil.crearMensajeINFO("Ingreso Correcto");
 			listaInventario=mInventario.findAllInventarioCas();
+			ListaProductos=mInventario.findAllPrdProductos();
 		}catch (Exception e) {
 			JSFUtil.crearMensajeERROR(e.getMessage());
 			e.printStackTrace();
@@ -75,9 +82,17 @@ public class BeanInvBodeguero implements Serializable {
 		this.listaInventario = listaInventario;
 	}
 
+	public List<PrdProducto> getListaProductos() {
+		return ListaProductos;
+	}
+
+	public void setListaProductos(List<PrdProducto> listaProductos) {
+		ListaProductos = listaProductos;
+	}
+
 	
    
-
+	
 	
 	
 	
