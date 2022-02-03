@@ -17,8 +17,10 @@
 	</p:growl>
 	<h:form>
 		<p:menubar>
-			<p:menuitem value="Regresar" icon="pi pi-arrow-left" action="#{beanVenEmpleados.actionCargarMenu()}" />
-			<p:menuitem value="Facturas" icon="pi pi-list" action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
+			<p:menuitem value="Regresar" icon="pi pi-arrow-left"
+				action="#{beanVenEmpleados.actionCargarMenu()}" />
+			<p:menuitem value="Facturas" icon="pi pi-list"
+				action="#{beanVenEmpleados.actionCargarMenuFacturas()}" />
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -34,7 +36,10 @@
 		<p:panel>
 			<h:form id="formDatos">
 				<p:dataTable value="#{beanVenEmpleados.listaPedidos}" var="p"
-					emptyMessage="No hay registros aún.">
+					emptyMessage="Sin registros." rows="6" paginator="true"
+					rowsPerPageTemplate="6,12,16"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 					<p:column headerText="ID">
 						<h:outputText value="#{p.idProforma}" />
 					</p:column>
@@ -52,8 +57,7 @@
 						<h:outputText value="#{p.estado}" />
 					</p:column>
 					<p:column headerText="OPCIONES">
-						<p:commandButton icon="pi pi-file-pdf"
-							value="Vizualizar" />
+						<p:commandButton icon="pi pi-file-pdf" value="Vizualizar" />
 					</p:column>
 				</p:dataTable>
 			</h:form>

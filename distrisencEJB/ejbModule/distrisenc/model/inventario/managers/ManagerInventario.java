@@ -21,46 +21,30 @@ public class ManagerInventario {
 
 	@EJB
 	private ManagerDAO mDAO;
-    /**
-     * Default constructor. 
-     */
-    public ManagerInventario() {
-        
-    }
-    
-  public List<InventarioCa> findAllInventarioCas(){
-	  return mDAO.findAll(InventarioCa.class);
-  }
-  
-  public List<PrdProducto> findAllPrdProductos(){
-	  return mDAO.findAll(PrdProducto.class);
-  }
-  
 
-  
-  
- 
-    
-  public InventarioCa insertarInventario(InventarioCa nuevoInventario) throws Exception {
-	  InventarioCa  inventario=new InventarioCa();
-	  inventario.setIdProducto(nuevoInventario.getIdProducto());
-	  inventario.setNombre(nuevoInventario.getNombre());
-	  inventario.setFecha(new Date());
-	  inventario.setCantidad(nuevoInventario.getCantidad());
-	  inventario.setTipo(nuevoInventario.getTipo());
-	  mDAO.insertar(inventario);
-	  return inventario;
-  }
-  
-  
+	/**
+	 * Default constructor.
+	 */
+	public ManagerInventario() {
 
-  
+	}
 
+	public List<InventarioCa> findAllInventarioCas() {
+		return mDAO.findAll(InventarioCa.class);
+	}
 
-    
+	public List<PrdProducto> findAllPrdProductos() {
+		return mDAO.findAll(PrdProducto.class);
+	}
 
-    
-    
-
-
+	public InventarioCa insertarInventario(InventarioCa nuevoInventario) throws Exception {
+		InventarioCa inventario = new InventarioCa();
+		inventario.setIdProducto(nuevoInventario.getIdProducto());
+		inventario.setNombre(nuevoInventario.getNombre());
+		inventario.setFecha(new Date());
+		inventario.setCantidad(nuevoInventario.getCantidad());
+		inventario.setTipo(nuevoInventario.getTipo());
+		mDAO.insertar(inventario);
+		return inventario;
+	}
 }

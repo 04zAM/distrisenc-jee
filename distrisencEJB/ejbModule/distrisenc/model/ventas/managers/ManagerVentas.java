@@ -57,15 +57,15 @@ public class ManagerVentas {
 	}
 
 	public List<VenFactura> findAllFacturas() {
-		return mDAO.findAll(VenFactura.class, "idFactura");
+		return mDAO.findAll(VenFactura.class, "idFactura", false);
 	}
 
 	public List<VenProforma> findAllProformas() {
-		return mDAO.findAll(VenProforma.class, "idProforma");
+		return mDAO.findAll(VenProforma.class, "idProforma", false);
 	}
 
 	public List<VenProforma> findAllPedidos() {
-		return mDAO.findWhere(VenProforma.class, "o.estado!='Pagado' AND o.estado!='Entregado'", "o.idProforma");
+		return mDAO.findWhere(VenProforma.class, "o.estado!='Pagado' AND o.estado!='Entregado'", "o.idProforma desc");
 	}
 
 	public List<VenDetProforma> findCarritoProducts() {

@@ -16,7 +16,7 @@
 		</p:growl>
 		<p:menubar>
 			<p:menuitem value="Regresar" icon="pi pi-home" action="/menu" />
-			<p:menuitem value="Productos" icon="pi pi-sell" action="productos" />
+			<p:menuitem value="Materia Prima" icon="pi pi-sell" action="productos" />
 			
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
@@ -27,9 +27,73 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
-		<p:staticMessage severity="info" summary="Módulo de administración"></p:staticMessage>
+		<p:staticMessage severity="info" summary="Módulo de Abastecimiento"></p:staticMessage>
 	</h:form>
 	<div>
+		<p:panel>
+		<p:commandButton value="Nuevo" icon="pi pi-plus" id="cmdNuevo"></p:commandButton>
+		<p:overlayPanel for="cmdNuevo" showCloseIcon="true">
+			<h:form>
+				<p:panelGrid columns="2">
+					<h:outputText value="Nombre del producto:" />
+					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matNombre}" />
+					<h:outputText value="Precio de Compra:" />
+					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matPrecio}" />
+					<h:outputText value="Stock Compra:" />
+					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matStock}"/>
+					<p:commandButton value="Guardar" icon="pi pi-save"
+						update="@form:,formDatos"
+						actionListener="#{beanAbsMateriaPrima.insertarMaterilPrimo()}"></p:commandButton>
+				</p:panelGrid>
+			</h:form>
+		</p:overlayPanel>
+		<h:form id="formDatos">
+			<p:dataTable value="#{beanAbsMateriaPrima.listaMaterial}" var="p"
+				emptyMessage="No hay registros aún.">
+				<p:column headerText="ID">
+					<h:outputText value="#{p.matId}" />
+				</p:column>
+				<p:column headerText="NOMBRE PRODUCTO">
+					<h:outputText value="#{p.matNombre}" />
+				</p:column>
+				<p:column headerText="PRECIO COSTO">
+					<i class="pi pi-dollar" style="font-size: 1rem"></i>
+					<h:outputText value="#{p.matPrecio}" />
+				</p:column>
+				<p:column headerText="STOCK">
+					<h:outputText value="#{p.matStock}" />
+				</p:column>
+				<p:column headerText="DISPONIBILIDAD">
+					<h:outputText value="#{p.matEstado}" />
+				</p:column>
+				
+				<p:column headerText="OPCIONES" style="width:70px">
+					<p:commandButton id="cmdEdicion" icon="pi pi-pencil" title="editar"
+						action="#{beanAbsMateriaPrima.actionSeleccionarEdicionMaterial(p)}"
+						update="@form,:formDatos" />
+					<p:overlayPanel for="cmdEdicion" dynamic="true"
+						showCloseIcon="true" style="width:70%">
+						<p:panel header="Editar Materia Prima">
+							<p:panelGrid columns="2">
+							
+							<h:outputText value="Precio de Compra:" />
+							<p:inputText value="#{p.matPrecio}" />
+							<h:outputText value="Stock :" />
+							<p:inputText value="#{p.matStock}" />
+								<p:commandButton value="Actualizar" icon="pi pi-save"
+									actionListener="#{beanAbsMateriaPrima.actualizarRegistroMaterial()}"
+									update="@form,:formDatos" ></p:commandButton>
+							</p:panelGrid>
+						</p:panel>
+					</p:overlayPanel>
+					<p:commandButton icon="pi pi-times-circle" title="eliminar"
+						styleClass="ui-button-danger" update="@form"
+						actionListener="#{beanAbsMateriaPrima.eliminarRegistroMaterial(p)}" />
+					
+				</p:column>	
+			</p:dataTable>
+		</h:form>
+	</p:panel>
 		
 	</div>
 </body>

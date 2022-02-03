@@ -26,6 +26,10 @@
 				<p:confirm header="Confirmación" message="Desea Facturar?"
 					icon="pi pi-info-circle" />
 			</p:menuitem>
+			<p:menuitem value="Imprimir Factura" icon="pi pi-file-pdf"
+				ajax="false"
+				action="#{beanVenEmpleados.actionImprimirFactura()}">
+			</p:menuitem>
 			<f:facet name="options">
 				<p:menuButton value="#{beanSegLogin.loginDTO.correo}"
 					icon="pi pi-user">
@@ -79,7 +83,7 @@
 				<h:outputText value="Precio:" />
 				<p:inputNumber
 					value="#{beanVenEmpleados.nuevoDetalle.prdProducto.venta}"
-					minValue="1" />
+					minValue="0" padControl="false" />
 				<p:commandButton value="Agregar" icon="pi pi-plus"
 					update="menu form formDatos"
 					actionListener="#{beanVenEmpleados.actionListenerAgregarDetalle()}"></p:commandButton>
@@ -113,8 +117,7 @@
 			</p:dataTable>
 			<p:panelGrid columns="4">
 				<h:outputText value="Observaciones: " />
-				<p:inputTextarea
-					value="#{beanVenEmpleados.observacion}" />
+				<p:inputText value="#{beanVenEmpleados.observacion}" />
 				<h:outputText value="Total:" />
 				<p:inputText disabled="true"
 					value="#{beanVenEmpleados.nuevaFactura.total}" />

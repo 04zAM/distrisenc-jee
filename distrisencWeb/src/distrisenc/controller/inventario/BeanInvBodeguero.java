@@ -43,13 +43,8 @@ public class BeanInvBodeguero implements Serializable {
 	private ManagerInventario mInventario;
 	private InventarioCa nuevoInventario;
 	private List<InventarioCa> listaInventario;
-	
 	private List<PrdProducto> ListaProductos;
 	
-
-
-	
-
 	public BeanInvBodeguero() {
 		
 	}
@@ -58,9 +53,7 @@ public class BeanInvBodeguero implements Serializable {
 	public void inicializar() {
 		listaInventario=mInventario.findAllInventarioCas();
 		nuevoInventario=new InventarioCa();
-		
 		ListaProductos=mInventario.findAllPrdProductos();
-
 	}
 	
 	public void actionListenerInsertarInven() {
@@ -114,7 +107,7 @@ public class BeanInvBodeguero implements Serializable {
 		Class.forName("org.postgresql.Driver");
 		Connection connection = null;
 		connection = DriverManager.getConnection(
-		"jdbc:postgresql://localhost:5432/distrinsenc","postgres", "cristian");
+		"jdbc:postgresql://localhost:5432/distrisenc","postgres", "root");
 		JasperPrint impresion=JasperFillManager.fillReport(ruta, parametros,connection);
 		JasperExportManager.exportReportToPdfStream(impresion, response.getOutputStream());
 		context.getApplication().getStateManager().saveView ( context ) ;

@@ -34,5 +34,15 @@ public class ManagerAbastecimiento {
     public void createAbsMateriaPrima(AbsMaterialPrima Abs) throws Exception {
     	mDAO.insertar(Abs);
     }
+    //Update
+    public void updateRegistroCliente(AbsMaterialPrima materia) throws Exception {
+    	mDAO.actualizar(materia);
+    }
+    //Eliminar
+ public void deleteRegistroMateria(AbsMaterialPrima material ) throws Exception {
+    	
+    	mDAO.eliminar(material.getClass(),material.getMatId());
+    }
+    
     
 }

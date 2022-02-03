@@ -2,13 +2,23 @@ package distrisenc.controller.ventas;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.DriverManager;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 import distrisenc.controller.JSFUtil;
 import distrisenc.model.core.entities.PrdProducto;
@@ -77,6 +87,37 @@ public class BeanVenEmpleados implements Serializable {
 		listaClientes = mVentas.findAllClientes();
 		listaFacDetalles = new ArrayList<VenDetFactura>();
 		return "formulario?faces-redirect=true";
+	}
+
+	public String actionImprimirFactura() {
+		JSFUtil.crearMensajeWARN("Guarde la Factura primero");
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		/*
+		 * parametros.put("p_titulo_principal",p_titulo_principal);
+		 * parametros.put("p_titulo",p_titulo);
+		 */
+		FacesContext context = FacesContext.getCurrentInstance();
+		ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+		String ruta = servletContext.getRealPath("ventas/vendedor/venta.jasper");
+		System.out.println(ruta);
+		HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+		response.addHeader("Content-disposition", "attachment;filename=comprobante.pdf");
+		response.setContentType("application/pdf");
+		try {
+			Class.forName("org.postgresql.Driver");
+			Connection connection = null;
+			connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/distrisenc", "postgres",
+					"root");
+			JasperPrint impresion = JasperFillManager.fillReport(ruta, parametros, connection);
+			JasperExportManager.exportReportToPdfStream(impresion, response.getOutputStream());
+			context.getApplication().getStateManager().saveView(context);
+			JSFUtil.crearMensajeINFO("Reporte generado.");
+			context.responseComplete();
+		} catch (Exception e) {
+			JSFUtil.crearMensajeERROR(e.getMessage());
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	public void actionListenerGuardarFactura() {

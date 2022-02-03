@@ -33,11 +33,14 @@
 		</p:menubar>
 		<p:staticMessage severity="info" summary="Pedidos Confirmados"></p:staticMessage>
 	</h:form>
-	<div>
+	<div class="card product">
 		<p:panel>
 			<h:form>
 				<p:dataTable value="#{beanVenEmpleados.listaPedidos}" var="p"
-					emptyMessage="No hay registros aún.">
+					emptyMessage="Sin registros." rows="6" paginator="true"
+					rowsPerPageTemplate="6,12,16"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 					<p:column headerText="ID">
 						<h:outputText value="#{p.idProforma}" />
 					</p:column>
@@ -72,8 +75,7 @@
 							</h:panelGrid>
 						</p:dialog>
 						<p:commandButton icon="pi pi-check-square" value="Pagado"
-							styleClass="ui-button-danger"
-							onclick="PF('dlg2').show();" />
+							styleClass="ui-button-danger" onclick="PF('dlg2').show();" />
 						<p:dialog widgetVar="dlg2" showEffect="fade">
 							<h:panelGrid columns="2">
 								<h:outputLabel for="observacion2" value="Observaciones:" />

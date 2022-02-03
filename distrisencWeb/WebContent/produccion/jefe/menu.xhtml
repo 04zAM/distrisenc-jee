@@ -35,9 +35,15 @@
 		<p:panel>
 			<h:form id="formDatos">
 				<p:dataTable value="#{beanPrdOrdenes.listaOrdenes}" var="o"
-					emptyMessage="No hay registros aún.">
+					emptyMessage="Sin registros." rows="6" paginator="true"
+					rowsPerPageTemplate="6,12,16"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 					<p:column headerText="ID">
 						<h:outputText value="#{o.idOrden}" />
+					</p:column>
+					<p:column headerText="CLIENTE">
+						<h:outputText value="#{o.venProforma.segUsuario.nombres}" />
 					</p:column>
 					<p:column headerText="FECHA">
 						<h:outputText value="#{o.fecha}" />

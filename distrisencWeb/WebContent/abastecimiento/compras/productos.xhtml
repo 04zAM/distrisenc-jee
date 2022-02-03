@@ -9,7 +9,7 @@
 		type="preRenderView"></f:event>
 </f:metadata>
 <h:head>
-	<title>Productos</title>
+	<title>Materia Prima</title>
 </h:head>
 <body>
 	<p:growl>
@@ -28,26 +28,9 @@
 				</p:menuButton>
 			</f:facet>
 		</p:menubar>
+		<p:staticMessage severity="info" summary="Materia Prima"></p:staticMessage>
 	</h:form>
 	<p:panel>
-		<p:commandButton value="Nuevo" icon="pi pi-plus" id="cmdNuevo"></p:commandButton>
-		<p:overlayPanel for="cmdNuevo" showCloseIcon="true">
-			<h:form>
-				<p:panelGrid columns="2">
-					<h:outputText value="Nombre del producto:" />
-					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matNombre}" />
-					<h:outputText value="Precio de Compra:" />
-					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matPrecio}" />
-					<h:outputText value="Stock Compra:" />
-					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matStock}"/>
-					<h:outputText value="Estado:" />
-					<p:inputText value="#{beanAbsMateriaPrima.nuevoMaterial.matEstado}"/>
-					<p:commandButton value="Guardar" icon="pi pi-save"
-						update="@form:,formDatos"
-						actionListener="#{beanAbsMateriaPrima.insertarMaterilPrimo()}"></p:commandButton>
-				</p:panelGrid>
-			</h:form>
-		</p:overlayPanel>
 		<h:form id="formDatos">
 			<p:dataTable value="#{beanAbsMateriaPrima.listaMaterial}" var="p"
 				emptyMessage="No hay registros aún.">
@@ -57,15 +40,14 @@
 				<p:column headerText="NOMBRE PRODUCTO">
 					<h:outputText value="#{p.matNombre}" />
 				</p:column>
-				<p:column headerText="PRECIO COSTO">
-					<i class="pi pi-dollar" style="font-size: 1rem"></i>
-					<h:outputText value="#{p.matPrecio}" />
-				</p:column>
 				<p:column headerText="STOCK">
 					<h:outputText value="#{p.matStock}" />
 				</p:column>
-				<p:column headerText="ESTADO">
-					<h:outputText value="#{p.matEstado}" />
+				<p:column headerText="DISPONIBLE">
+				<i
+						class="#{p.matEstado ? 'pi pi-check-circle' :'pi pi-times-circle'}"
+						style="font-size: 1rem"></i>
+					<h:outputText value="#{p.matEstado ? ' Si' :' No'}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
